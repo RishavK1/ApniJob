@@ -32,14 +32,14 @@ const Navbar = () => {
             <div className="flex items-center gap-3">
               <Link to="/login">
                 <Button
-                  className="border  border-gray-300 text-gray-700 px-4 py-2 rounded-3xl hover:border-gray-500"
+                  className="border  border-gray-300 text-gray-700 px-4 py-2 rounded-2xl hover:border-gray-500"
                   variant="outline"
                 >
                   Login
                 </Button>
               </Link>
               <Link to="/signup">
-                <Button className="bg-[#6A38C2] text-white px-4 py-2 rounded-3xl hover:bg-[#5a2e9b]">
+                <Button className="bg-[#6A38C2] text-white px-4 py-2 rounded-2xl ">
                   Signup
                 </Button>
               </Link>
