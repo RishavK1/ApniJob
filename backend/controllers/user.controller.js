@@ -1,11 +1,11 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import cookieParser from "cookie-parser";
 
 export const register = async (req, res) => {
   try {
     const { fullname, email, phonenumber, password, role } = req.body;
+    console.log(fullname, email, phonenumber, password, role);
     if (!fullname || !email || !phonenumber || !password || !role) {
       return res.status(400).json({
         message: "Please fill in all fields",
