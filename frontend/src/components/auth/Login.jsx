@@ -4,37 +4,55 @@ import { Label } from "../ui/label.jsx";
 import { Input } from "../ui/Input.jsx";
 import { RadioGroup } from "../ui/radio-group";
 import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "sonner";
+import { USER_API } from "../utils/constant";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "@/redux/authSlice";
+import { Loader2 } from "lucide-react";
+
 const Login = () => {
- const [input, setInput] = useState({
-   email: "",
-   password: "",
-   role: "",
- });
+  const [input, setInput] = useState({
+    email: "",
+    password: "",
+    role: "",
+  });
+  const { loading } = useSelector(store => store.auth);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const changeEventhandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
-  }
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    
+
     try {
-      const res = await axios.post(`${USER_API}/login`, input, {
+      dispatch(setLoading(true));
+      const res = await axios.post(`${USER_API}login`, input, {
         headers: {
           "Content-Type": "application/json",
         },
         withCredentials: true,
       });
+
       if (res.data.success) {
-        navigate("/");
         toast.success(res.data.message);
+        navigate("/"); // Redirect on successful login
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message);
-
+      toast.error(
+        error.response?.data?.message || "Login failed. Please try again."
+      );
+    }
+    finally {
+      dispatch(setLoading(false));
     }
   };
+
   return (
     <div>
       <Navbar />
@@ -57,7 +75,7 @@ const Login = () => {
           </div>
 
           <div className="my-2">
-            <Label>Password </Label>
+            <Label>Password</Label>
             <Input
               type="password"
               placeholder="Enter your password"
@@ -66,6 +84,7 @@ const Login = () => {
               onChange={changeEventhandler}
             />
           </div>
+
           <div className="flex items-center justify-between">
             <RadioGroup className="flex items-center gap-4 my-5">
               <div className="flex items-center space-x-2">
@@ -92,10 +111,20 @@ const Login = () => {
               </div>
             </RadioGroup>
           </div>
-          <Button type="submit" className="bg-black w-full mb-3 text-white px-4 py-2 rounded-2xl ">
-            Login
-          </Button>
-          <span className="text-sm ">
+          {loading ? (
+            <Button className="w-full my-4">
+              <Loader2 className="mr-0 h-4 w-4 animate-spin" /> Please Wait
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              className="bg-black w-full mb-3 text-white px-4 py-2 rounded-2xl hover:bg-black hover:text-white"
+            >
+              Login
+            </Button>
+          )}
+
+          <span className="text-sm">
             Don't have an account?
             <Link to="/signup" className="text-blue-600">
               Signup

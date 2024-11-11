@@ -115,7 +115,7 @@ export const updateProfile = async (req, res) => {
     const file = req.file;
     let skillsArray;
     if (skills) {
-    skillsArray = skills.split(",");
+      skillsArray = skills.split(",");
     }
     const userId = req.id;
     let user = await User.findById(userId);
@@ -125,13 +125,13 @@ export const updateProfile = async (req, res) => {
         success: false,
       });
     }
-    // updating data// 
-    if(fullname)user.fullname = fullname;
-    if(email) user.email = email;
-    if(phonenumber) user.phonenumber = phonenumber;
-    if(bio) user.profile.bio = bio;
-    if(skills) user.profile.skills = skillsArray;
-    await user.save(); 
+    // Updating data
+    if (fullname) user.fullname = fullname;
+    if (email) user.email = email;
+    if (phonenumber) user.phonenumber = phonenumber;
+    if (bio) user.profile.bio = bio;
+    if (skills) user.profile.skills = skillsArray;
+    await user.save();
     user = {
       _id: user._id,
       fullname: user.fullname,

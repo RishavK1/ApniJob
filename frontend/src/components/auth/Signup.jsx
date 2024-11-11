@@ -7,6 +7,10 @@ import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
+import { USER_API } from "../utils/constant";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "@/redux/authSlice";
+import { Loader2 } from "lucide-react";
 const Signup = () => {
   const [input, setInput] = useState({
     fullname: "",
@@ -16,8 +20,9 @@ const Signup = () => {
     role: "",
     file: "",
   });
-
+  const { loading } = useSelector(store => store.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const changeEventhandler = (e) => {
     // Update input values based on name attributes
@@ -28,7 +33,6 @@ const Signup = () => {
     // Update the file in input state using optional chaining to avoid undefined errors
     setInput({ ...input, file: e.target.files?.[0] });
   };
-const USER_API = "http://localhost:3001/api/user";
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -46,7 +50,8 @@ const USER_API = "http://localhost:3001/api/user";
     }
 
     try {
-      const res = await axios.post(`${USER_API}/register`, formData, {
+      dispatch(setLoading(true));
+      const res = await axios.post(`${USER_API}register`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -61,6 +66,9 @@ const USER_API = "http://localhost:3001/api/user";
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message || "Registration failed.");
+    }
+    finally {
+      dispatch(setLoading(false));
     }
   };
 
@@ -148,12 +156,18 @@ const USER_API = "http://localhost:3001/api/user";
               />
             </div>
           </div>
-          <Button
-            type="submit"
-            className="bg-black w-full my-4 text-white px-4 py-2 rounded-2xl "
-          >
-            Signup
-          </Button>
+          {loading ? (
+            <Button className="w-full my-4">
+              <Loader2 className="mr-0 h-4 w-4 animate-spin" /> Please Wait
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              className="bg-black w-full mb-3  text-white px-4 py-2 rounded-2xl hover:bg-black hover:text-white"
+            >
+              Signup
+            </Button>
+          )}
           <span className="text-sm">
             Already have an account?
             <Link to="/login" className="text-blue-600">

@@ -19,8 +19,8 @@ const Navbar = () => {
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16 px-4">
         <div>
           <Link to="/">
-            <h1 className="text-2xl font-bold">
-              Job<span className="text-[#F83002]">Play</span>
+            <h1 className="text-3xl font-bold">
+              Apni<span className="text-[#F83002]">Job</span>
             </h1>
           </Link>
         </div>
@@ -41,7 +41,7 @@ const Navbar = () => {
                 </Button>
               </Link>
               <Link to="/signup">
-                <Button className="bg-[#6A38C2] text-white px-4 py-2 rounded-2xl ">
+                <Button className="bg-[#6A38C2] text-white px-4 py-2 rounded-2xl hover:border-purple-950 ">
                   Signup
                 </Button>
               </Link>
