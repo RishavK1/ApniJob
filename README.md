@@ -31,8 +31,8 @@ This project is powered by the MERN stack, which provides a scalable and robust 
 * **Database:**	MongoDB
 * **State Management:**	Redux Toolkit for centralized and efficient state management
 * **Authentication:**	JSON Web Token (JWT)
-- **Sooner Additions**: Advanced search, notification system, and more.
-- **File Storage**: Cloudinary for image uploads
+ **Sooner Additions**: Advanced search, notification system, and more.
+ **File Storage**: Cloudinary for image uploads
 
 
 
