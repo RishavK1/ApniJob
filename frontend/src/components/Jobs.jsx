@@ -6,7 +6,7 @@ import DiffJob from "./DiffJob";
 const Jobs = () => {
   let jobs = [1, 2, 3, 4, 5, 6, 7, 8];
   return (
-    <div>
+    <div className="bg-gray-100">
       <Navbar />
       <div className="max-w-7xl mx-auto mt-5">
         <div className="flex gap-5">
