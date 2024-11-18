@@ -4,8 +4,12 @@ import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Contact, Mail, Pen } from "lucide-react";
 import { Badge } from "./ui/badge";
+import { Label } from "./ui/label";
 
 const Profile = () => {
+  let skills = ["Html", "React", "NodeJs", "Javascript"];
+
+  const isResume = true;
   return (
     <div>
       <Navbar />
@@ -38,14 +42,39 @@ const Profile = () => {
           <div className="flex items-center gap-3 my-2">
             <Contact></Contact>
             <span>999999999</span>
-                  </div>
-                  <div>
-                      <h1>Skills</h1>
-                      {
-                          [1,2,3,4].map((item, index)=><Badge key={index} className="bg-gray-300">{item}</Badge>)
-                      }
           </div>
-          
+          <div className="my-5">
+            <h1>Skills</h1>
+            <div className="flex items-center gap-1 mt-2">
+              {skills != 0 ? (
+                skills.map((item, index) => (
+                  <Badge key={index} className="bg-gray-300">
+                    {item}
+                  </Badge>
+                ))
+              ) : (
+                <span>NA</span>
+              )}
+            </div>
+          </div>
+          <div className="grid w-full max-w-sm items-center gap-1.5">
+            <Label className="text-md font-bold">Resume</Label>
+            {isResume ? (
+              <a
+                target="blank"
+                href="https://x.com/rishavkamboj75"
+                className="text-blue-500 w-full hover:underline cursor-pointer"
+              >
+                Rishav
+              </a>
+            ) : (
+              <span>NA</span>
+            )}
+          </div>
+          <div className="max-w-4xl mx-auto bg-white rounded-2xl">
+            <h1>Applied Jobs</h1>
+            {/* Application Table a new component */}
+          </div>
         </div>
       </div>
     </div>
