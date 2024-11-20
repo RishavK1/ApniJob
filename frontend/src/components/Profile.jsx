@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { Contact, Mail, Pen } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { Label } from "./ui/label";
+import AppliedJobTable from "./AppliedJobTable";
 
 const Profile = () => {
   let skills = ["Html", "React", "NodeJs", "Javascript"];
@@ -13,7 +14,7 @@ const Profile = () => {
   return (
     <div>
       <Navbar />
-      <div className="max-w-7xl mx-auto bg-white border border-gray-300 rounded-2xl my-5 p-8">
+      <div className="max-w-4xl mx-auto bg-white border border-gray-300 rounded-2xl my-5 p-8">
         <div className="flex justify-between">
           <div className="flex items-center gap-4">
             <Avatar className="h-24 w-24">
@@ -71,11 +72,12 @@ const Profile = () => {
               <span>NA</span>
             )}
           </div>
-          <div className="max-w-4xl mx-auto bg-white rounded-2xl">
-            <h1>Applied Jobs</h1>
-            {/* Application Table a new component */}
-          </div>
         </div>
+      </div>
+      <div className="max-w-4xl mx-auto bg-white rounded-2xl">
+        <h1 className="font-bold text-lg my-5">Applied Jobs</h1>
+        {/* Application Table a new component */}
+        <AppliedJobTable></AppliedJobTable>
       </div>
     </div>
   );
