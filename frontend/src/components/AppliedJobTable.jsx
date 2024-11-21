@@ -22,7 +22,7 @@ const AppliedJobTable = () => {
               <TableCell>20-11-2024</TableCell>
               <TableCell>Full Stack Developer</TableCell>
               <TableCell>Microsoft</TableCell>
-              <TableCell className="text-right"><Badge className="bg-black text-white">Accepted</Badge></TableCell>
+              <TableCell className="text-right"><Badge className="bg-black text-white hover:bg-black">Accepted</Badge></TableCell>
             </TableRow>
           ))}
         </TableBody>

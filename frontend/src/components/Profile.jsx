@@ -49,7 +49,7 @@ const Profile = () => {
             <div className="flex items-center gap-1 mt-2">
               {skills != 0 ? (
                 skills.map((item, index) => (
-                  <Badge key={index} className="bg-gray-300">
+                  <Badge key={index} className="bg-gray-300 hover:bg-gray-300">
                     {item}
                   </Badge>
                 ))
