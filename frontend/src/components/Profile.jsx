@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "./shared/Navbar";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
@@ -7,10 +7,10 @@ import { Badge } from "./ui/badge";
 import { Label } from "./ui/label";
 import AppliedJobTable from "./AppliedJobTable";
 
+let skills = ["Html", "React", "NodeJs", "Javascript"];
+const isResume = true;
 const Profile = () => {
-  let skills = ["Html", "React", "NodeJs", "Javascript"];
-
-  const isResume = true;
+  const [open, setOpen] = useState(false);
   return (
     <div>
       <Navbar />
