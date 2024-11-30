@@ -34,33 +34,44 @@ const UpdateProfile = ({ open, setOpen }) => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('fullname', input.fullname);
-    formData.append('email', input.email);
-    formData.append('phonenumber', input.phonenumber);
-    formData.append('bio', input.bio);
-    formData.append("skills", input.skills);
-    if (input.file) {
-      formData.append('resume', input.file);
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("fullname", input.fullname || "");
+      formData.append("email", input.email || "");
+      formData.append("phonenumber", input.phonenumber || "");
+      formData.append("bio", input.bio || "");
+
+      // Handle skills array properly
+      if (Array.isArray(input.skills)) {
+        formData.append("skills", input.skills.join(","));
+      } else if (typeof input.skills === "string") {
+        formData.append("skills", input.skills);
+      }
+
+      // Only append file if it exists
+      if (input.file) {
+        formData.append("resume", input.file);
+      }
+
+      const res = await axios.post(`${USER_API}/profile/update`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      });
+
+      if (res.data.success) {
+        dispatch(setUser(res.data.user));
+        toast.success(res.data.message);
+        setOpen(false);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Update failed");
+    } finally {
+      setLoading(false);
     }
-try {
-  const res = await axios.post(`${USER_API}/profile/update`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",  
-    },
-    withCredentials:true,
-  });
-  if (res.data.success) {
-    dispatch(setUser(res.data.user));
-    toast.success(res.data.message);
-  }
-} catch (error) {
-  console.log(error);
-  toast.error(error.response.data.message);
-    }
-    setOpen(false);
-    console.log(input);
-  }
+  };
   return (
     <div>
       <Dialog open={open}>
