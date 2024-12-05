@@ -29,7 +29,7 @@ const Profile = () => {
             </Avatar>
             <div>
               <h1 className="font-medium text-xl">{user?.fullname}</h1>
-              <p>{ user?.profile?.bio}</p>
+              <p>{user?.profile?.bio}</p>
             </div>
           </div>
           <Button
@@ -68,10 +68,10 @@ const Profile = () => {
             {isResume ? (
               <a
                 target="blank"
-                href="https://x.com/rishavkamboj75"
+                href={user?.profile?.resume}
                 className="text-blue-500 w-full hover:underline cursor-pointer"
               >
-                Rishav
+                {user?.profile?.resumeOriginalName}
               </a>
             ) : (
               <span>NA</span>
