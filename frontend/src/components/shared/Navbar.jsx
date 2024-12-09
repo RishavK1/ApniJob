@@ -5,15 +5,37 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 
 import { LogOut, User2 } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { USER_API } from "../utils/constant";
+import { toast } from "sonner";
+import { setUser } from "@/redux/authSlice";
 
 const Navbar = () => {
   const { user } = useSelector(store => store.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const logouthandler = async () => {
+    try {
+      const res = await axios.get(`${USER_API}/logout`, {
+        withCredentials: true,
+      });
+      if (res.data.success) {
+        dispatch(setUser(null));
+        navigate("/");
+        toast.success("Logged out successfully");
+      }
+      
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.messsage);
+    }
+  }
 
   return (
     <div className="bg-white">
@@ -95,7 +117,8 @@ const Navbar = () => {
                     <LogOut />
                     <Button
                       variant="link"
-                      className="text-red-600 hover:underline"
+                        className="text-red-600 hover:underline"
+                        onClick={logouthandler}
                     >
                       Log out
                     </Button>
