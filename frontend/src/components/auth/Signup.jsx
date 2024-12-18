@@ -46,7 +46,7 @@ const Signup = () => {
 
     // Fix: Reference the file from the input state instead of an undefined variable
     if (input.file) {
-      formData.append("file", input.file);
+      formData.append("profilephoto", input.file);
     }
 
     try {

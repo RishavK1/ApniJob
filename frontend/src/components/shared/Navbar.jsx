@@ -83,7 +83,7 @@ const Navbar = () => {
               <PopoverTrigger asChild>
                 <Avatar className="cursor-pointer">
                   <AvatarImage
-                    src="https://github.com/shadcn.png"
+                    src={user?.profile?.profilephoto}
                     alt="@shadcn"
                   />
                 </Avatar>
@@ -92,7 +92,7 @@ const Navbar = () => {
                 <div className="flex gap-4 space-y-2">
                   <Avatar className="cursor-pointer">
                     <AvatarImage
-                      src="https://github.com/shadcn.png"
+                      src={user?.profile?.profilephoto}
                       alt="@shadcn"
                     />
                   </Avatar>
@@ -117,8 +117,8 @@ const Navbar = () => {
                     <LogOut />
                     <Button
                       variant="link"
-                        className="text-red-600 hover:underline"
-                        onClick={logouthandler}
+                      className="text-red-600 hover:underline"
+                      onClick={logouthandler}
                     >
                       Log out
                     </Button>
