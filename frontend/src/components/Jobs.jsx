@@ -5,7 +5,7 @@ import DiffJob from "./DiffJob";
 import { useSelector } from "react-redux";
 
 const Jobs = () => {
-  let jobs = [1, 2, 3, 4, 5, 6, 7, 8];
+  // let jobs = [1, 2, 3, 4, 5, 6, 7, 8];
 
   const {allJobs} = useSelector(store => store.job);
   return (
