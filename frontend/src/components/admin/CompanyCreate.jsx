@@ -45,8 +45,8 @@ const CompanyCreate = () => {
         <Label>Company name</Label>
         <Input
           type="text"
-          className="my-2"
-          placeholder="ApniJob, JobPlay , Google etc"
+          className="my-2 border border-gray-900 p-2 w-full rounded-xl focus:ring focus:outline-none "
+          placeholder="Enter Company name"
           onChange={(e) => setCompanyName(e.target.value)}
         />
         <div className="flex items-center gap-2 my-10">
