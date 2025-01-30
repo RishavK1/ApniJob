@@ -31,8 +31,9 @@ const JobDescription = () => {
           ...singleJob,
           application: [...singleJob.applications, { applicant: user._id } ], // here
         };
+                toast.success(res.data.message);
+
         dispatch(setSingleJob(updatedSingleJob));
-        toast.success(res.data.message);
       }
     } catch (error) {
       console.log(error);

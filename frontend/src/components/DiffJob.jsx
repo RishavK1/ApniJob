@@ -37,7 +37,7 @@ const DiffJob = ({job}) => {
           variant=""
         >
           <Avatar>
-            <AvatarImage src="https://img.freepik.com/premium-vector/minimalist-logo-design-any-corporate-brand-business-company_1253202-77511.jpg" />
+            <AvatarImage src={job?.company?.logo} />
           </Avatar>
         </Button>
         <div>

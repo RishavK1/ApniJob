@@ -3,33 +3,124 @@ import Navbar from "../shared/Navbar";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "../ui/button";
 import { useSelector } from "react-redux";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import axios from "axios";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
+import { JOB_API } from "../utils/constant";
 
-const companyArray = [];
 const PostJobs = () => {
   const [input, setInput] = useState({
     title: "",
     description: "",
-    requirements: "",
+    requiremensts: "", 
     salary: "",
     location: "",
     jobType: "",
     experience: "",
-    position: 0,
+    postion: 0, 
     companyId: "",
   });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { companies } = useSelector((store) => store.company);
+
   const changeEventHandler = (e) => {
     setInput({
       ...input,
       [e.target.name]: e.target.value,
     });
   };
-  const { companies } = useSelector((store) => store.company);
+
+  const selectChangeHandler = (value) => {
+    const selectedCompany = companies.find(
+      (company) => company.name.toLowerCase() === value
+    );
+    setInput({
+      ...input,
+      companyId: selectedCompany._id,
+    });
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+
+      console.log("Input being sent:", input);
+
+      if (!input.companyId) {
+        toast.error("Please select a company before posting the job.");
+        return;
+      }
+
+      const postionAsNumber = Number(input.postion);
+      if (isNaN(postionAsNumber)) {
+        toast.error("Number of positions must be a valid number.");
+        return;
+      }
+
+      // Prepare the data to match the backend expectations
+      const jobData = {
+        title: input.title,
+        description: input.description,
+        requiremensts: input.requiremensts, 
+        salary: input.salary,
+        location: input.location,
+        postion: postionAsNumber, 
+        jobType: input.jobType,
+        companyId: input.companyId,
+        experience: input.experience,
+      };
+
+      // Send the request
+      const res = await axios.post(`${JOB_API}/postJob`, jobData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+      // Handle the response
+      if (res.data.success) {
+        toast.success(res.data.message);
+        navigate("/admin/jobs");
+      } else {
+        toast.error("Unexpected response from server");
+      }
+    } catch (error) {
+      console.error("Error posting job:", error);
+      if (error.response) {
+        // Log the server's error message
+        console.error("Server error message:", error.response.data.message);
+        toast.error(
+          error.response.data.message ||
+            "Bad Request: Invalid data sent to server."
+        );
+      } else {
+        toast.error("Network error: Unable to connect to the server.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
-      <Navbar></Navbar>
+      <Navbar />
       <div className="flex items-center justify-center w-screen my-11">
-        <form className="p-8 max-w-4xl border border-gray-300 shadow-xl rounded-xl">
+        <form
+          onSubmit={submitHandler}
+          className="p-8 max-w-4xl border border-gray-300 shadow-xl rounded-xl"
+        >
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Title</Label>
@@ -57,10 +148,10 @@ const PostJobs = () => {
               <Label>Requirements</Label>
               <input
                 type="text"
-                name="requirements"
+                name="requiremensts" 
                 className="border border-gray-500 p-2 w-full my-2 rounded-xl focus:ring focus:outline-none"
                 placeholder="Enter requirements"
-                value={input.requirements}
+                value={input.requiremensts}
                 onChange={changeEventHandler}
               />
             </div>
@@ -112,15 +203,15 @@ const PostJobs = () => {
               <Label> No. of Position</Label>
               <input
                 type="number"
-                name="position"
+                name="postion" 
                 className="border border-gray-500 p-2 w-full my-2 rounded-xl focus:ring focus:outline-none"
                 placeholder="Enter position"
-                value={input.position}
+                value={input.postion}
                 onChange={changeEventHandler}
               />
             </div>
             {companies.length > 0 && (
-              <Select>
+              <Select onValueChange={selectChangeHandler}>
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-xl mb-4">
                   <SelectValue placeholder="Select a Company" />
                 </SelectTrigger>
@@ -128,8 +219,8 @@ const PostJobs = () => {
                   <SelectGroup>
                     {companies.map((company) => (
                       <SelectItem
-                        key={company.id}
-                        value={company.name}
+                        key={company._id}
+                        value={company?.name?.toLowerCase()}
                         className="hover:bg-gray-100 px-6 py-2 flex items-center justify-between"
                       >
                         <span>{company.name}</span>
@@ -140,12 +231,22 @@ const PostJobs = () => {
               </Select>
             )}
           </div>
-          <Button className="bg-black text-white hover:bg-black w-full mt-4 rounded-xl">
-            Post New Job
-          </Button>
+
+          {loading ? (
+            <Button className="w-full my-4">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              className="bg-black w-full mb-3 text-white px-4 py-2 rounded-2xl hover:bg-black hover:text-white"
+            >
+              Post New Job
+            </Button>
+          )}
           {companies.length === 0 && (
             <p className="text-xs text-red-600 font-bold text-center my-5">
-              *Please register a company first , before posting a jobs
+              *Please register a company first, before posting a job.
             </p>
           )}
         </form>

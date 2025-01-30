@@ -54,7 +54,6 @@ export const postJob = async (req, res) => {
     console.log(error);
   }
 };
-// job will be searched by student
 export const getAllJobs = async (req, res) => {
     try {
         const keyboard = req.query.keyboard || "";

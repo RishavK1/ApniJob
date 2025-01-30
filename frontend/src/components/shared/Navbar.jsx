@@ -101,7 +101,7 @@ const Navbar = () => {
                   />
                 </Avatar>
               </PopoverTrigger>
-              <PopoverContent className="w-72">
+              <PopoverContent className="w-72 bg-white">
                 <div className="flex gap-4 space-y-2">
                   <Avatar className="cursor-pointer">
                     <AvatarImage
@@ -110,7 +110,7 @@ const Navbar = () => {
                     />
                   </Avatar>
                   <div>
-                    <h4 className="font-medium">Rishav</h4>
+                    <h4 className="font-medium">{user?.fullname}</h4>
                     <p className="text-sm text-muted">{user?.profile?.bio} </p>
                   </div>
                 </div>
