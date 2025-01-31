@@ -56,11 +56,11 @@ export const postJob = async (req, res) => {
 };
 export const getAllJobs = async (req, res) => {
     try {
-        const keyboard = req.query.keyboard || "";
+        const keyword = req.query.keyword || "";
         const query = {
             $or: [
-                { title: { $regex: keyboard, $options: "i" } },
-                { description: { $regex: keyboard, $options: "i" } },
+                { title: { $regex: keyword, $options: "i" } },
+                { description: { $regex: keyword, $options: "i" } },
             ]
         }
         const jobs = await Job.find(query).populate({

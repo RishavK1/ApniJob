@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./shared/Navbar";
 import FilterCard from "./FilterCard";
 import DiffJob from "./DiffJob";
@@ -7,7 +7,22 @@ import { useSelector } from "react-redux";
 const Jobs = () => {
   // let jobs = [1, 2, 3, 4, 5, 6, 7, 8];
 
-  const {allJobs} = useSelector(store => store.job);
+  const { allJobs, searchedQuery } = useSelector((store) => store.job);
+  const [filteredJobs, setFilteredJobs] = useState(allJobs);
+  useEffect(() => {
+    if (searchedQuery) {
+      const filterJob = allJobs.filter((job) => {
+        return (
+          job.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+          job.description.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+          job.location.toLowerCase().includes(searchedQuery.toLowerCase()) 
+        );
+      });
+      setFilteredJobs(filterJob);
+    } else {
+      setFilteredJobs(allJobs);
+    }
+  }, [allJobs, searchedQuery]);
   return (
     <div className="bg-gray-100">
       <Navbar />
@@ -16,14 +31,14 @@ const Jobs = () => {
           <div className="w-[20%]">
             <FilterCard />
           </div>
-          {allJobs.length <= 0 ? (
+          {filteredJobs.length <= 0 ? (
             <span>Job Not Found</span>
           ) : (
             <div className="flex-1 h-[88vh] overflow-y-auto pb-5">
               <div className="grid grid-cols-3 gap-4  ">
-                {allJobs.map((job) => (
+                {filteredJobs.map((job) => (
                   <div>
-                    <DiffJob key={job?._id} job={ job} /> 
+                    <DiffJob key={job?._id} job={job} />
                   </div>
                 ))}
               </div>
