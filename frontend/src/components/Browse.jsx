@@ -4,6 +4,7 @@ import DiffJob from './DiffJob';
 import { useDispatch, useSelector } from 'react-redux';
 import useGetAllJobs from '@/hooks/useGetAllJobs';
 import { setSearchedQuery } from '@/redux/jobSlice';
+import { motion } from 'framer-motion';
 
 const Browse = () => {
   useGetAllJobs();
@@ -21,11 +22,17 @@ const Browse = () => {
         <h1 className="font-bold text-xl my-10">
           Search Results ({allJobs.length})
         </h1>
-        <div className="grid grid-cols-3 gap-4 ">
+        <motion.div
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -100 }}
+          transition={{ duration: 0.3 }}
+          className="grid grid-cols-3 gap-4 "
+        >
           {allJobs.map((job) => {
             return <DiffJob key={job._id} job={job} />;
           })}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
