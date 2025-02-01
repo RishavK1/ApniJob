@@ -15,6 +15,8 @@ const AppliedJobTable = () => {
   const { allAppliedJobs } = useSelector((store) => store.job);
   return (
     <div>
+      <h1 className="font-bold text-lg my-5">Applied Jobs ({allAppliedJobs.length}) </h1>
+
       <Table>
         <TableCaption>A List of Applied Jobs</TableCaption>
         <TableHeader>
@@ -38,10 +40,10 @@ const AppliedJobTable = () => {
                   <Badge
                     className={`${
                       appliedJob?.status === "rejected"
-                        ? "bg-red-400 hover:bg-red-400" 
+                        ? "bg-red-400 hover:bg-red-400"
                         : appliedJob?.status === "pending"
-                        ? "bg-gray-400 hover:bg-gray-400" 
-                        : "bg-green-400 hover:bg-green-400" 
+                        ? "bg-gray-400 hover:bg-gray-400"
+                        : "bg-green-400 hover:bg-green-400"
                     }`}
                   >
                     {appliedJob.status.toUpperCase()}

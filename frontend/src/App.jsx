@@ -14,6 +14,7 @@ import PostJobs from "./components/admin/PostJobs";
 import Applicants from "./components/admin/Applicants";
 import ProtectedRoutes from "./components/admin/ProtectedRoutes";
 import NotFound from "./components/NotFound";
+// import AdminJobEdit from "./components/admin/AdminJobEdit";
 
 const appRouter = createBrowserRouter([
   {
@@ -118,6 +119,14 @@ const appRouter = createBrowserRouter([
       </ProtectedRoutes>
     ),
   },
+  // {
+  //   path: "/admin/jobs/:id/edit",
+  //   element: (
+  //     <ProtectedRoutes role="recruiter">
+  //       <AdminJobEdit />
+  //     </ProtectedRoutes>
+  //   ),
+  // },
 ]);
 
 function App() {

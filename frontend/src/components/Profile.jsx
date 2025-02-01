@@ -25,7 +25,7 @@ const Profile = () => {
           <div className="flex items-center gap-4">
             <Avatar className="h-24 w-24">
               <AvatarImage
-                src="https://img.freepik.com/premium-vector/minimalist-logo-design-any-corporate-brand-business-company_1253202-77511.jpg"
+                src={user?.profile?.profilephoto}
                 alt="profile image"
               ></AvatarImage>
             </Avatar>
@@ -82,7 +82,6 @@ const Profile = () => {
         </div>
       </div>
       <div className="max-w-4xl mx-auto bg-white rounded-2xl">
-        <h1 className="font-bold text-lg my-5">Applied Jobs</h1>
         {/* Application Table a new component */}
         <AppliedJobTable></AppliedJobTable>
       </div>

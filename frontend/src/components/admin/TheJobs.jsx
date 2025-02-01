@@ -23,7 +23,7 @@ const TheJobs = () => {
         <div className="flex items-center justify-between my-5">
           <Input
             className="w-fit border-gray-950 rounded-xl"
-            placeholder="Filter By name , role "
+            placeholder="Filter by name , role "
             onChange={(e) => setInput(e.target.value)}
           />
           <Button
