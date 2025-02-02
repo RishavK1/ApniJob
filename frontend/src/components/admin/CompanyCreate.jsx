@@ -43,9 +43,9 @@ const CompanyCreate = () => {
           </p>
         </div>
         <Label>Company name</Label>
-        <Input
+        <input
           type="text"
-          className="my-2 border border-gray-900 p-2 w-full rounded-xl focus:ring focus:outline-none "
+          className="my-2 border border-gray-800 p-2 w-full rounded-xl  focus:outline-black "
           placeholder="Enter Company name"
           onChange={(e) => setCompanyName(e.target.value)}
         />

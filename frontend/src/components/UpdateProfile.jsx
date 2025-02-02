@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog";
 import { Label } from "./ui/label";
 import { Input } from "./ui/Input";
 import { Button } from "./ui/button";
@@ -12,24 +18,25 @@ import { toast } from "sonner";
 
 const UpdateProfile = ({ open, setOpen }) => {
   const [loading, setLoading] = useState(false);
-  const { user } = useSelector(store => store.auth);
+  const { user } = useSelector((store) => store.auth);
   const [input, setInput] = useState({
     fullname: user?.fullname,
     email: user?.email,
     phonenumber: user?.phonenumber,
     bio: user?.profile?.bio,
-    skills:user?.profile?.skills?.map(skill=>skill),
+    skills: user?.profile?.skills?.map((skill) => skill),
     file: user?.profile?.resume,
   });
   const dispatch = useDispatch();
 
   const onChangeHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
-  }
+  };
+
   const onFileCghangeHandler = (e) => {
     const file = e.target.files?.[0];
     setInput({ ...input, file });
-  }
+  };
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -71,18 +78,20 @@ const UpdateProfile = ({ open, setOpen }) => {
       setLoading(false);
     }
   };
+
   return (
     <div>
-      <Dialog open={open}>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           className="bg-white sm:max-w-[425px]"
           onInteractOutside={() => setOpen(false)}
+          onClose={() => setOpen(false)}
         >
           <DialogHeader>
             <DialogTitle>Update Profile</DialogTitle>
           </DialogHeader>
-          <form onSubmit={onSubmitHandler}>
-            <div className="grid gap-4 py-4 ">
+          <form className="rounded-xl" onSubmit={onSubmitHandler}>
+            <div className="grid gap-4 py-4 rounded-xl">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
                   Name
@@ -94,7 +103,7 @@ const UpdateProfile = ({ open, setOpen }) => {
                   value={input.fullname}
                   onChange={onChangeHandler}
                   className="col-span-3 border border-gray-600 rounded-xl focus:ring-8 focus:ring-black focus:border-black focus:ring-offset-0"
-                ></Input>
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
@@ -107,7 +116,7 @@ const UpdateProfile = ({ open, setOpen }) => {
                   value={input.email}
                   onChange={onChangeHandler}
                   className="col-span-3 border border-gray-600 rounded-xl focus:ring-8 focus:ring-black focus:border-black focus:ring-offset-0"
-                ></Input>
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
@@ -119,7 +128,7 @@ const UpdateProfile = ({ open, setOpen }) => {
                   value={input.phonenumber}
                   onChange={onChangeHandler}
                   className="col-span-3 border border-gray-600 rounded-xl focus:ring-8 focus:ring-black focus:border-black focus:ring-offset-0"
-                ></Input>
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
@@ -131,7 +140,7 @@ const UpdateProfile = ({ open, setOpen }) => {
                   value={input.bio}
                   onChange={onChangeHandler}
                   className="col-span-3 border border-gray-600 rounded-xl focus:ring-8 focus:ring-black focus:border-black focus:ring-offset-0"
-                ></Input>
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
@@ -143,7 +152,7 @@ const UpdateProfile = ({ open, setOpen }) => {
                   value={input.skills}
                   onChange={onChangeHandler}
                   className="col-span-3 border border-gray-600 rounded-xl focus:ring-8 focus:ring-black focus:border-black focus:ring-offset-0"
-                ></Input>
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
@@ -156,7 +165,7 @@ const UpdateProfile = ({ open, setOpen }) => {
                   onChange={onFileCghangeHandler}
                   accept="application/pdf"
                   className="col-span-3 border border-gray-600 rounded-xl focus:ring-8 focus:ring-black focus:border-black focus:ring-offset-0"
-                ></Input>
+                />
               </div>
             </div>
             <DialogFooter>
@@ -167,7 +176,7 @@ const UpdateProfile = ({ open, setOpen }) => {
               ) : (
                 <Button
                   type="submit"
-                  className="bg-black w-full mb-3  text-white px-4 py-2 rounded-2xl hover:bg-black hover:text-white"
+                  className="bg-black w-full mb-3 text-white px-4 py-2 rounded-2xl hover:bg-black hover:text-white"
                 >
                   Update
                 </Button>

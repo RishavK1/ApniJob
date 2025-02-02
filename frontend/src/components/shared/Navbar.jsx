@@ -5,7 +5,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom"; 
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 
@@ -17,9 +17,11 @@ import { toast } from "sonner";
 import { setUser } from "@/redux/authSlice";
 
 const Navbar = () => {
-  const { user } = useSelector(store => store.auth);
+  const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation(); 
+
   const logouthandler = async () => {
     try {
       const res = await axios.get(`${USER_API}/logout`, {
@@ -30,12 +32,11 @@ const Navbar = () => {
         navigate("/");
         toast.success("Logged out successfully");
       }
-      
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.messsage);
     }
-  }
+  };
 
   return (
     <div className="bg-white">
@@ -76,7 +77,7 @@ const Navbar = () => {
             <div className="flex items-center gap-3">
               <Link to="/login">
                 <Button
-                  className="border  border-gray-300 text-gray-700 px-4 py-2 rounded-2xl hover:border-gray-500"
+                  className="border border-gray-300 text-gray-700 px-4 py-2 rounded-2xl hover:border-gray-500"
                   variant="outline"
                 >
                   Login
@@ -84,8 +85,7 @@ const Navbar = () => {
               </Link>
               <Link to="/signup">
                 <Button
-                  variant="outline"
-                  className="border bg-[#6A38C2] text-white px-4 py-2 rounded-2xl"
+                  className="border bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded-2xl"
                 >
                   Signup
                 </Button>
@@ -94,39 +94,41 @@ const Navbar = () => {
           ) : (
             <Popover>
               <PopoverTrigger asChild>
-                <Avatar className="cursor-pointer">
+                <Avatar className="cursor-pointer border border-blue-200">
                   <AvatarImage
                     src={user?.profile?.profilephoto}
                     alt="@shadcn"
                   />
                 </Avatar>
               </PopoverTrigger>
-              <PopoverContent className="w-72 bg-white">
+              <PopoverContent className="w-72 bg-white rounded-2xl">
                 <div className="flex gap-4 space-y-2">
-                  <Avatar className="cursor-pointer">
+                  <Avatar className="cursor-pointer border border-blue-200">
                     <AvatarImage
                       src={user?.profile?.profilephoto}
                       alt="@shadcn"
                     />
                   </Avatar>
                   <div>
-                    <h4 className="font-medium">{user?.fullname}</h4>
-                    <p className="text-sm text-muted">{user?.profile?.bio} </p>
+                    <h4 className="font-bold">{user?.fullname}</h4>
+                    <p className="text-sm text-muted">{user?.profile?.bio}</p>
                   </div>
                 </div>
                 <div className="flex flex-col my-2 text-gray-600">
-                  {user && user.role === "student" && (
-                    <div className="flex w-fit items-center gap-2 cursor-pointer">
-                      <User2 />
-                      <Button
-                        variant="link"
-                        className="text-blue-600 hover:underline"
-                      >
-                        <Link to="/profile"> View Profile</Link>
-                      </Button>
-                    </div>
-                  )}
-                  
+                  {user &&
+                    user.role === "student" &&
+                    location.pathname !== "/profile" && (
+                      <div className="flex w-fit items-center gap-2 cursor-pointer">
+                        <User2 />
+                        <Button
+                          variant="link"
+                          className="text-blue-600 hover:underline"
+                        >
+                          <Link to="/profile">View Profile</Link>
+                        </Button>
+                      </div>
+                    )}
+
                   <div className="flex w-fit items-center gap-2 cursor-pointer">
                     <LogOut />
                     <Button

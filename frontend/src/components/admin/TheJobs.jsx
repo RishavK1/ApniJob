@@ -21,8 +21,8 @@ const TheJobs = () => {
       <Navbar></Navbar>
       <div className=" max-w-6xl mx-auto my-10">
         <div className="flex items-center justify-between my-5">
-          <Input
-            className="w-fit border-gray-950 rounded-xl"
+          <input
+            className="border border-gray-400 p-2 my-2 w-[400px] rounded-xl focus:ring focus:outline-none"
             placeholder="Filter by name , role "
             onChange={(e) => setInput(e.target.value)}
           />

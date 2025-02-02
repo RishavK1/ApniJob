@@ -79,16 +79,17 @@ useEffect(() => {
   return (
     <div>
       <Navbar />
-      <div className="flex items-center justify-center max-w-7xl mx-auto">
+      <div className="flex items-center justify-center max-w-7xl mx-auto ">
         <form
           onSubmit={submitHandler}
-          className="w-1/2 border border-gray-200 rounded-md p-4 my-10"
+          className="w-1/2 border border-gray-300 p-4 my-10 rounded-xl"
         >
-          <h1 className="font-bold text-xl mb-5">Sign up</h1>
+          <h1 className="font-bold text-xl mb-2">Sign up</h1>
           <div className="my-2">
             <Label>Full Name</Label>
-            <Input
+            <input
               type="text"
+              className="border border-gray-400 p-2 my-2 w-full rounded-xl focus:ring focus:outline-none"
               placeholder="Enter your full name"
               name="fullname"
               value={input.fullname}
@@ -97,8 +98,9 @@ useEffect(() => {
           </div>
           <div className="my-2">
             <Label>Email</Label>
-            <Input
+            <input
               type="text"
+              className="border border-gray-400 p-2 my-2 w-full rounded-xl focus:ring focus:outline-none"
               placeholder="Enter your email"
               name="email"
               value={input.email}
@@ -107,8 +109,9 @@ useEffect(() => {
           </div>
           <div className="my-2">
             <Label>Phonenumber</Label>
-            <Input
+            <input
               type="text"
+              className="border border-gray-400 p-2 my-2 w-full rounded-xl focus:ring focus:outline-none"
               placeholder="Enter your phonenumber"
               name="phonenumber"
               value={input.phonenumber}
@@ -117,8 +120,9 @@ useEffect(() => {
           </div>
           <div className="my-2">
             <Label>Password </Label>
-            <Input
+            <input
               type="password"
+              className="border border-gray-400 p-2 my-2 w-full rounded-xl focus:ring focus:outline-none"
               placeholder="Enter your password"
               name="password"
               value={input.password}
@@ -152,10 +156,10 @@ useEffect(() => {
             </RadioGroup>
             <div className="flex items-center gap-2">
               <Label>Profile</Label>
-              <Input
+              <input
                 accept="image/*"
                 type="file"
-                className="cursor-pointer"
+                className="border border-gray-400 p-2 cursor-pointer my-2 w-fit rounded-xl focus:ring focus:outline-none"
                 onChange={changeFilehandler}
               />
             </div>

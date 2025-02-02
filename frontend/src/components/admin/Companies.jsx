@@ -8,23 +8,18 @@ import useGetAllCompanies from "@/hooks/useGetAllCompanies";
 import { useDispatch } from "react-redux";
 import { setSearchCompanyByText } from "@/redux/CompanySlice";
 
-const LoaderDots = () => (
-  <div className="flex flex-col items-center justify-center">
-    <p className="text-2xl font-semibold text-gray-700">Loading</p>
-    <div className="flex gap-2 mt-2">
-      <div
-        className="w-3 h-3 bg-black rounded-full animate-bounce"
-        style={{ animationDelay: "0s" }}
-      ></div>
-      <div
-        className="w-3 h-3 bg-black rounded-full animate-bounce"
-        style={{ animationDelay: "0.1s" }}
-      ></div>
-      <div
-        className="w-3 h-3 bg-black rounded-full animate-bounce"
-        style={{ animationDelay: "0.2s" }}
-      ></div>
+const PulseWaveLoader = () => (
+  <div className="flex flex-col items-center justify-center min-h-[400px]">
+    <div className="flex gap-1">
+      {[...Array(3)].map((_, i) => (
+        <div
+          key={i}
+          className="w-4 h-4 bg-gray-800 rounded-full animate-pulse"
+          style={{ animationDelay: `${i * 0.15}s` }}
+        ></div>
+      ))}
     </div>
+    <p className="mt-4 text-gray-600 font-medium">Loading companies...</p>
   </div>
 );
 
@@ -40,20 +35,11 @@ const Companies = () => {
 
   return (
     <div>
-      <Navbar></Navbar>
-      {isLoading && (
-        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50">
-          <div className="flex items-center justify-center h-full">
-            <div className="bg-white p-8 rounded-2xl shadow-lg">
-              <LoaderDots />
-            </div>
-          </div>
-        </div>
-      )}
+      <Navbar />
       <div className="max-w-6xl mx-auto my-10">
         <div className="flex items-center justify-between my-5">
-          <Input
-            className="w-fit border-gray-950 rounded-xl"
+          <input
+            className="border border-gray-400 p-2 my-2 w-fit rounded-xl focus:ring focus:outline-none"
             placeholder="Filter By name "
             onChange={(e) => setInput(e.target.value)}
           />
@@ -64,7 +50,8 @@ const Companies = () => {
             New Company
           </Button>
         </div>
-        <CompaniesTable />
+
+        {isLoading ? <PulseWaveLoader /> : <CompaniesTable />}
       </div>
     </div>
   );
