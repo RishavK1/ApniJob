@@ -23,19 +23,24 @@ const CompaniesTable = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const filteredCompany = companies.length >= 0 && companies.filter((company) => {
-      if (!searchCompanyByText) {
-        return true;
-      };
-      return company.name.toLowerCase().includes(searchCompanyByText.toLowerCase());
-    });
+    const filteredCompany =
+      companies.length >= 0 &&
+      companies.filter((company) => {
+        if (!searchCompanyByText) {
+          return true;
+        }
+        return company.name
+          .toLowerCase()
+          .includes(searchCompanyByText.toLowerCase());
+      });
     setFilterCompany(filteredCompany);
-
-  },[searchCompanyByText , companies]);
+  }, [searchCompanyByText, companies]);
   return (
     <div>
       <Table>
-        <TableCaption>A List of recent registered companies </TableCaption>
+        {/* <TableCaption className="mb-5">
+          A List of recent registered companies
+        </TableCaption> */}
         <TableHeader>
           <TableRow>
             <TableHead>Logo</TableHead>
@@ -46,13 +51,17 @@ const CompaniesTable = () => {
         </TableHeader>
         <TableBody>
           {companies.length <= 0 ? (
-            <span>You have not registered any company yet !</span>
+            <TableRow>
+              <TableCell colSpan={4} className="text-center">
+                <span>You have not registered any company yet!</span>
+              </TableCell>
+            </TableRow>
           ) : (
             <>
               {filterCompany?.map((company) => (
-                <tr>
+                <TableRow key={company._id}>
                   <TableCell>
-                    <Avatar>
+                    <Avatar className="border border-blue-300">
                       <AvatarImage src={company.logo} />
                     </Avatar>
                   </TableCell>
@@ -66,15 +75,17 @@ const CompaniesTable = () => {
                       <PopoverContent className="w-28 rounded-xl bg-white">
                         <div
                           onClick={() =>
-                            navigate(`/admin/companies/${company._id}`)}
-                          className="flex items-center gap-2  w-fit cursor-pointer">
+                            navigate(`/admin/companies/${company._id}`)
+                          }
+                          className="flex items-center gap-2  w-fit cursor-pointer"
+                        >
                           <Edit2 className="w-4"></Edit2>
                           <span>Edit</span>
                         </div>
                       </PopoverContent>
                     </Popover>
                   </TableCell>
-                </tr>
+                </TableRow>
               ))}
             </>
           )}
