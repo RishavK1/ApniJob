@@ -111,8 +111,8 @@ const ApplicantsTable = ({ applications, isLoading, onStatusChange }) => {
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-40 p-0">
-                    <div className="flex flex-col">
+                  <PopoverContent className="w-40 p-0 bg-white">
+                    <div className="flex flex-col ">
                       <Button
                         variant="ghost"
                         className="justify-start rounded-none hover:bg-green-50 hover:text-green-600"
