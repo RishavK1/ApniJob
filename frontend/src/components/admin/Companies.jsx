@@ -36,7 +36,6 @@ const Companies = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
       <Navbar />
       <div className="max-w-6xl mx-auto px-4 pt-8 pb-12">
-        {" "}
         {/* Adjusted pt-20 to pt-8 */}
         {/* Header Section */}
         <div className="mb-2">

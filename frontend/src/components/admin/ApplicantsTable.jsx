@@ -1,94 +1,138 @@
 import React from "react";
+import { MoreHorizontal, FileText, Phone, Mail, User } from "lucide-react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "../ui/table";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { MoreHorizontal } from "lucide-react";
-import { useSelector } from "react-redux";
-import axios from "axios";
-import { APPLICATION_API } from "../utils/constant";
-import { toast } from "sonner";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
 
-let selectingStatus = ["Accepted", "Rejected"];
-const ApplicantsTable = () => {
-  const { applicants } = useSelector((store) => store.application);
-  const statusHandler = async (status, id) => {
-    try {
-      axios.defaults.withCredentials = true;
-      const res = await axios.post(`${APPLICATION_API}/status/${id}/update`, {
-        status,
-      });
-      console.log(res.data);
-      if (res.data.success) {
-        toast.success(res.data.message);
-      }
-    } catch (error) {
-      toast.error(error.response?.data?.message || "An error occurred");
-    }
+const TableSkeleton = () => (
+  <div className="space-y-3">
+    {[...Array(5)].map((_, i) => (
+      <div key={i} className="flex items-center space-x-4">
+        <div className="h-12 w-full animate-pulse bg-gray-200 rounded"></div>
+      </div>
+    ))}
+  </div>
+);
+
+const ApplicantsTable = ({ applications, isLoading, onStatusChange }) => {
+  if (isLoading) return <TableSkeleton />;
+
+  const getStatusBadge = (status) => {
+    const colors = {
+      Pending: "bg-yellow-100 text-yellow-800",
+      Accepted: "bg-green-100 text-green-800",
+      Rejected: "bg-red-100 text-red-800",
+    };
+    return colors[status] || colors.Pending;
   };
+
   return (
-    <div>
+    <div className="rounded-xl border bg-white shadow">
       <Table>
-        <TableCaption>Applicants for the job</TableCaption>
         <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Phone</TableHead>
-            <TableHead>Resume</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead className="text-right">Action</TableHead>
+          <TableRow className="bg-gray-50">
+            <TableHead className="font-semibold">
+              <User className="inline mr-2" size={16} />
+              Applicant
+            </TableHead>
+            <TableHead className="font-semibold">
+              <Mail className="inline mr-2" size={16} />
+              Contact
+            </TableHead>
+            <TableHead className="font-semibold">
+              <FileText className="inline mr-2" size={16} />
+              Resume
+            </TableHead>
+            <TableHead className="font-semibold">Status</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {applicants &&
-            applicants.application.map((item) => (
-              <tr key={item._id}>
-                <TableCell>{item?.applicant?.fullname}</TableCell>
-                <TableCell>{item?.applicant?.email}</TableCell>
-                <TableCell>{item?.applicant?.phonenumber}</TableCell>
-                <TableCell>
-                  {item?.applicant?.profile?.resume ? (
-                    <a
-                      className="text-blue-600 cursor-pointer"
-                      href={item?.applicant?.profile?.resume}
-                      target="blank"
-                    >
-                      {item?.applicant?.profile?.resumeOriginalName}
-                    </a>
-                  ) : (
-                    <span>N/A</span>
-                  )}
-                </TableCell>
-                <TableCell>
-                  {item?.applicant?.createdAt.split("T")[0]}{" "}
-                </TableCell>
-                <TableCell className="text-right">
-                  <Popover>
-                    <PopoverTrigger>
-                      <MoreHorizontal></MoreHorizontal>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-32">
-                      {selectingStatus.map((status, index) => (
-                        <div
-                          onClick={() => statusHandler(status, item?._id)}
-                          key={index}
-                          className="cursor-pointer bg-white items-center"
-                        >
-                          <span>{status}</span>
-                        </div>
-                      ))}
-                    </PopoverContent>
-                  </Popover>
-                </TableCell>
-              </tr>
-            ))}
+          {applications?.map((item) => (
+            <TableRow key={item._id} className="hover:bg-gray-50">
+              <TableCell className="font-medium">
+                <div className="flex flex-col">
+                  <span>{item?.applicant?.fullname}</span>
+                  <span className="text-sm text-gray-500">
+                    Applied on{" "}
+                    {new Date(item?.applicant?.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="flex flex-col">
+                  <span className="flex items-center gap-1">
+                    <Mail size={14} />
+                    {item?.applicant?.email}
+                  </span>
+                  <span className="flex items-center gap-1 text-gray-500">
+                    <Phone size={14} />
+                    {item?.applicant?.phonenumber}
+                  </span>
+                </div>
+              </TableCell>
+              <TableCell>
+                {item?.applicant?.profile?.resume ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      window.open(item?.applicant?.profile?.resume, "_blank")
+                    }
+                  >
+                    <FileText className="mr-2 rounded-xl" size={14} />
+                    View Resume
+                  </Button>
+                ) : (
+                  <span className="text-gray-500">Not available</span>
+                )}
+              </TableCell>
+              <TableCell>
+                <span
+                  className={`px-2 py-1 rounded-full ${getStatusBadge(
+                    item.status
+                  )}`}
+                >
+                  {item.status || "Pending"}
+                </span>
+              </TableCell>
+              <TableCell className="text-right">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="ghost" size="sm">
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-40 p-0">
+                    <div className="flex flex-col">
+                      <Button
+                        variant="ghost"
+                        className="justify-start rounded-none hover:bg-green-50 hover:text-green-600"
+                        onClick={() => onStatusChange("Accepted", item._id)}
+                      >
+                        Accept
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="justify-start rounded-none hover:bg-red-50 hover:text-red-600"
+                        onClick={() => onStatusChange("Rejected", item._id)}
+                      >
+                        Reject
+                      </Button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>

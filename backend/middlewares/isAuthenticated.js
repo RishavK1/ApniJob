@@ -5,20 +5,39 @@ dotenv.config();
 
 const isAuthenticated = async (req, res, next) => {
   try {
-    const token = req.cookies.token;
+    let token = req.cookies.token;
+
+    // If token is not in cookies, check Authorization header
+    if (!token && req.headers.authorization) {
+      token = req.headers.authorization.split(" ")[1]; // "Bearer <token>"
+    }
+
     if (!token) {
       return res.status(401).json({
-        message: "Unauthorized user",
+        message: "Unauthorized user. No token provided.",
         success: false,
       });
     }
+
+    // Verify token
     const decode = jwt.verify(token, process.env.SECRET_KEY);
-    req.id = decode.userId;
+
+    req.id = decode.userId; // Attach admin ID to request
+
     next();
   } catch (error) {
-    console.log(error);
-    res.status(401).json({
-      message: "Token is invalid",
+    console.error("Authentication error:", error.message);
+
+    // Handle token expiration error
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({
+        message: "Session expired. Please log in again.",
+        success: false,
+      });
+    }
+
+    return res.status(401).json({
+      message: "Invalid token. Authentication failed.",
       success: false,
     });
   }

@@ -38,9 +38,7 @@ const CompaniesTable = () => {
   return (
     <div>
       <Table>
-        {/* <TableCaption className="mb-5">
-          A List of recent registered companies
-        </TableCaption> */}
+        
         <TableHeader>
           <TableRow>
             <TableHead>Logo</TableHead>
