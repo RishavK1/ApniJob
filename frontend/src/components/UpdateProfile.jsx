@@ -38,46 +38,95 @@ const UpdateProfile = ({ open, setOpen }) => {
     setInput({ ...input, file });
   };
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("fullname", input.fullname || "");
-      formData.append("email", input.email || "");
-      formData.append("phonenumber", input.phonenumber || "");
-      formData.append("bio", input.bio || "");
+  // const onSubmitHandler = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("fullname", input.fullname || "");
+  //     formData.append("email", input.email || "");
+  //     formData.append("phonenumber", input.phonenumber || "");
+  //     formData.append("bio", input.bio || "");
 
-      // Handle skills array properly
-      if (Array.isArray(input.skills)) {
-        formData.append("skills", input.skills.join(","));
-      } else if (typeof input.skills === "string") {
-        formData.append("skills", input.skills);
-      }
+  //     // Handle skills array properly
+  //     if (Array.isArray(input.skills)) {
+  //       formData.append("skills", input.skills.join(","));
+  //     } else if (typeof input.skills === "string") {
+  //       formData.append("skills", input.skills);
+  //     }
 
-      // Only append file if it exists
-      if (input.file) {
-        formData.append("resume", input.file);
-      }
+  //     // Only append file if it exists
+  //     if (input.file) {
+  //       formData.append("resume", input.file);
+  //     }
 
-      const res = await axios.post(`${USER_API}/profile/update`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      });
+  //     const res = await axios.post(`${USER_API}/profile/update`, formData, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //       withCredentials: true,
+  //     });
 
-      if (res.data.success) {
-        dispatch(setUser(res.data.user));
-        toast.success(res.data.message);
-        setOpen(false);
-      }
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Update failed");
-    } finally {
-      setLoading(false);
+  //     if (res.data.success) {
+  //       dispatch(setUser(res.data.user));
+  //       toast.success(res.data.message);
+  //       setOpen(false);
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.response?.data?.message || "Update failed");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+const onSubmitHandler = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  try {
+    const formData = new FormData();
+    formData.append("fullname", input.fullname || "");
+    formData.append("email", input.email || "");
+    formData.append("phonenumber", input.phonenumber || "");
+    formData.append("bio", input.bio || "");
+
+    // Handle skills array properly
+    if (Array.isArray(input.skills)) {
+      formData.append("skills", input.skills.join(","));
+    } else if (typeof input.skills === "string") {
+      formData.append("skills", input.skills);
     }
-  };
+
+    // Only append file if it exists
+    if (input.file) {
+      formData.append("resume", input.file);
+    }
+
+    // Get token from localStorage
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Unauthorized: Token not provided");
+      setLoading(false);
+      return;
+    }
+
+    const res = await axios.post(`${USER_API}/profile/update`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`, // Add token here
+      },
+      withCredentials: true,
+    });
+
+    if (res.data.success) {
+      dispatch(setUser(res.data.user));
+      toast.success(res.data.message);
+      setOpen(false);
+    }
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Update failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div>
@@ -86,10 +135,16 @@ const UpdateProfile = ({ open, setOpen }) => {
           className="bg-white sm:max-w-[425px]"
           onInteractOutside={() => setOpen(false)}
           onClose={() => setOpen(false)}
+          aria-describedby="update-profile-description" // ✅ Add this line
         >
           <DialogHeader>
             <DialogTitle>Update Profile</DialogTitle>
           </DialogHeader>
+          <p id="update-profile-description" className="sr-only">
+            Update your profile information including name, email, phone, and
+            skills.
+          </p>
+
           <form className="rounded-xl" onSubmit={onSubmitHandler}>
             <div className="grid gap-4 py-4 rounded-xl">
               <div className="grid grid-cols-4 items-center gap-4">
