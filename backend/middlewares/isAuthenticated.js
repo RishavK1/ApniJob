@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+
+
 const isAuthenticated = async (req, res, next) => {
   try {
     let token = req.cookies.token;
@@ -11,6 +13,7 @@ const isAuthenticated = async (req, res, next) => {
     if (!token && req.headers.authorization) {
       token = req.headers.authorization.split(" ")[1]; // "Bearer <token>"
     }
+
 
     if (!token) {
       return res.status(401).json({
@@ -22,13 +25,11 @@ const isAuthenticated = async (req, res, next) => {
     // Verify token
     const decode = jwt.verify(token, process.env.SECRET_KEY);
 
-    req.id = decode.userId; // Attach admin ID to request
-
+    req.id = decode.userId; // Attach user ID to request
     next();
   } catch (error) {
     console.error("Authentication error:", error.message);
 
-    // Handle token expiration error
     if (error.name === "TokenExpiredError") {
       return res.status(401).json({
         message: "Session expired. Please log in again.",
@@ -42,5 +43,6 @@ const isAuthenticated = async (req, res, next) => {
     });
   }
 };
+
 
 export default isAuthenticated;
