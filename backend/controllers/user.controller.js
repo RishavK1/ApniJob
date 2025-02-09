@@ -143,40 +143,7 @@ export const login = async (req, res) => {
 };
 
 
-//   try {
-//     const { fullname, email, phonenumber, bio, skills } = req.body;
-//     const userId = req.user.userId;
 
-//     let user = await User.findById(userId);
-//     if (!user) {
-//       return res
-//         .status(404)
-//         .json({ message: "User not found", success: false });
-//     }
-
-//     if (fullname) user.fullname = fullname;
-//     if (email) user.email = email;
-//     if (phonenumber) user.phonenumber = phonenumber;
-//     if (bio) user.profile.bio = bio;
-//     if (skills)
-//       user.profile.skills = skills.split(",").map((skill) => skill.trim());
-
-//     if (req.file) {
-//       const fileUri = getDataUri(req.file);
-//       const cloudRes = await cloudinary.uploader.upload(fileUri.content);
-//       user.profile.profilephoto = cloudRes.secure_url;
-//     }
-
-//     await user.save();
-//     return res
-//       .status(200)
-//       .json({ message: "Profile updated successfully", user, success: true });
-//   } catch (err) {
-//     return res
-//       .status(500)
-//       .json({ message: "Server error", error: err.message });
-//   }
-// };
 export const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phonenumber, bio, skills } = req.body;
