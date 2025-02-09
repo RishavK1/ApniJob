@@ -153,7 +153,6 @@ export const updateProfile = async (req, res) => {
     // Check if the user exists
     let user = await User.findById(userId);
     if (!user) {
-      console.error("User not found for ID:", userId); // ✅ Debugging log
       return res
         .status(404)
         .json({ message: "User not found", success: false });
@@ -170,7 +169,6 @@ export const updateProfile = async (req, res) => {
 
     // Handle file upload
     if (req.file) {
-      console.log("File received:", req.file.originalname); // ✅ Debugging log
       const fileUri = getDataUri(req.file);
       const cloudRes = await cloudinary.uploader.upload(fileUri.content);
       user.profile.profilephoto = cloudRes.secure_url;
