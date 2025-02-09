@@ -142,7 +142,7 @@ export const login = async (req, res) => {
   }
 };
 
-// export const updateProfile = async (req, res) => {
+
 //   try {
 //     const { fullname, email, phonenumber, bio, skills } = req.body;
 //     const userId = req.user.userId;
@@ -182,7 +182,6 @@ export const updateProfile = async (req, res) => {
     const { fullname, email, phonenumber, bio, skills } = req.body;
     const userId = req.id; // ✅ Ensure user ID is being passed correctly
 
-    console.log("User ID received:", userId); // ✅ Debugging log
 
     // Check if the user exists
     let user = await User.findById(userId);
