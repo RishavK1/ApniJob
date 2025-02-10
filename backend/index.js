@@ -30,6 +30,10 @@ app.use("/api/v1/company/", companyRoute);
 app.use("/api/v1/jobs/", jobRoute);
 app.use("/api/v1/application/", applicationRoute);
 
+// Health Check Route
+app.get("/health", (req, res) => {
+  res.status(200).json({ message: "Server is healthy!" });
+});
 // Start Server
 const PORT = process.env.PORT || 5000; // Default to 5000 if PORT is not defined
 app.listen(PORT, () => {
