@@ -63,47 +63,7 @@ export const postJob = async (req, res) => {
 };
 
 // Fetch all jobs (for students or general users)
-// export const getAllJobs = async (req, res) => {
-//   try {
-//     const keyword = req.query.keyword || ""; // Search keyword (if any)
 
-//     const query = {
-//       $or: [
-//         { title: { $regex: keyword, $options: "i" } },
-//         { description: { $regex: keyword, $options: "i" } },
-//       ],
-//     };
-
-//     const jobs = await Job.find(query)
-//       .populate({
-//         path: "company",
-//         select: "name location", // Populate only required fields from company
-//       })
-//       .sort({
-//         createdAt: -1, // Sort by newest first
-//       });
-
-//     if (!jobs.length) {
-//       return res.status(404).json({
-//         message: "No jobs found",
-//         jobs: [],
-//         success: true,
-//       });
-//     }
-
-//     res.status(200).json({
-//       message: "Jobs retrieved successfully",
-//       jobs,
-//       success: true,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({
-//       message: "Server error",
-//       success: false,
-//     });
-//   }
-// };
 export const getAllJobs = async (req, res) => {
   try {
     const keyword = req.query.keyword || ""; // Search keyword (if any)
@@ -146,35 +106,7 @@ export const getAllJobs = async (req, res) => {
   }
 };
 
-// Fetch job by ID (for students or general users)
-// export const getJobByid = async (req, res) => {
-//   try {
-//     const jobId = req.params.id;
 
-//     const job = await Job.findById(jobId).populate({
-//       path: "application", // Populate associated applications (if applicable)
-//     });
-
-//     if (!job) {
-//       return res.status(404).json({
-//         message: "Job not found",
-//         success: false,
-//       });
-//     }
-
-//     res.status(200).json({
-//       message: "Job found",
-//       job,
-//       success: true,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({
-//       message: "Server error",
-//       success: false,
-//     });
-//   }
-// };
 
 // Fetch jobs created by the logged-in admin
 export const getJobByid = async (req, res) => {
@@ -210,39 +142,8 @@ export const getJobByid = async (req, res) => {
     });
   }
 };
-// export const getAdminJob = async (req, res) => {
-//   try {
-//     const adminId = req.id; // Ensure this is taken from authentication middleware
 
-//     // Fetch only jobs created by this admin
-//     const jobs = await Job.find({ createdBy: adminId })
-//       .populate({
-//         path: "company",
-//         select: "name location", // Populate only required fields
-//       })
-//       .sort({ createdAt: -1 });
 
-//     if (!jobs.length) {
-//       return res.status(200).json({
-//         message: "No jobs found",
-//         jobs: [],
-//         success: true,
-//       });
-//     }
-
-//     res.status(200).json({
-//       message: "Jobs retrieved successfully",
-//       jobs,
-//       success: true,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({
-//       message: "Server error",
-//       success: false,
-//     });
-//   }
-// };
 export const getAdminJob = async (req, res) => {
   try {
     const adminId = req.id; // Ensure this is taken from authentication middleware
