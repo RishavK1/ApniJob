@@ -1,4 +1,3 @@
-// Login.jsx
 import React, { useEffect, useState } from "react";
 import Navbar from "../shared/Navbar";
 import { Label } from "../ui/label.jsx";
@@ -20,34 +19,42 @@ const Login = () => {
     password: "",
     role: "",
   });
-  const [pageLoading, setPageLoading] = useState(true); // New state for initial page load
+  const [pageLoading, setPageLoading] = useState(true);
   const { loading, user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // Handle input change
   const changeEventhandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission
   const submitHandler = async (e) => {
     e.preventDefault();
-
     try {
       dispatch(setLoading(true));
+
+      console.log("Sending request to:", `${USER_API}login`);
+      console.log("User Input:", input);
+
       const res = await axios.post(`${USER_API}login`, input, {
         headers: {
           "Content-Type": "application/json",
         },
-        withCredentials: true,
+        withCredentials: true, // Ensure cookies are sent
       });
 
       if (res.data.success) {
+        // Save token in localStorage for authentication
+        localStorage.setItem("token", res.data.token);
         dispatch(setUser(res.data.user));
+
         toast.success(res.data.message);
         navigate("/");
       }
     } catch (error) {
-      console.log(error);
+      console.error("Login Error:", error.response?.data || error.message);
       toast.error(
         error.response?.data?.message || "Login failed. Please try again."
       );
@@ -57,11 +64,12 @@ const Login = () => {
   };
 
   useEffect(() => {
-    // Simulate initial page load
+    // Simulate initial page load delay
     const timer = setTimeout(() => {
       setPageLoading(false);
-    }, 1000); // You can adjust this time or replace with actual data loading
+    }, 1000);
 
+    // Redirect if user is already logged in
     if (user) {
       navigate("/");
     }
