@@ -19,8 +19,8 @@ app.use(cookieParser());
 
 // Updated CORS Configuration
 const corsOption = {
-  origin: ["http://localhost:5173", "https://apni-job.vercel.app/"], // Allow both local and deployed frontend
-  credentials: true, // Enable credentials sharing
+  origin: ["http://localhost:5173", "https://apni-job.vercel.app"],
+  credentials: true,
 };
 app.use(cors(corsOption));
 
