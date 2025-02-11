@@ -23,7 +23,7 @@ const jobSlice = createSlice({
     setSearchJobByText: (state, action) => {
       state.searchJobByText = action.payload;
     },
-    setAllAppledJobs: (state, action) => {
+    setAllAppliedJobs: (state, action) => {
       state.allAppliedJobs = action.payload;
     },
       setSearchedQuery: (state, action) => {
