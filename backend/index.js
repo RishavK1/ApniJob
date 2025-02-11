@@ -21,8 +21,11 @@ app.use(cookieParser());
 const corsOption = {
   origin: ["http://localhost:5173", "https://apni-job.vercel.app"],
   credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 app.use(cors(corsOption));
+
 
 // API Routes
 app.use("/api/v1/user/", userRoute);
