@@ -8,7 +8,6 @@ import { Label } from "./ui/label";
 import AppliedJobTable from "./AppliedJobTable";
 import UpdateProfile from "./UpdateProfile";
 import { useSelector } from "react-redux";
-import store from "@/redux/store";
 import useGetAllAppliedJobs from "@/hooks/useGetAllAppliedJobs";
 
 // Profile Card Skeleton Loader

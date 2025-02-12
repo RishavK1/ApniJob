@@ -10,39 +10,37 @@ const useGetAllAppliedJobs = () => {
   useEffect(() => {
     const fetchAppliedJobs = async () => {
       try {
-          const res = await axios.get(`${APPLICATION_API}/get`, {
-              withCredentials: true,
-          });
-          if (res.data.success) {
-              dispatch(setAllAppliedJobs(res.data.application));
-          }
+        const token = localStorage.getItem("token"); // Ensure token retrieval
+        if (!token) {
+          console.error("No token found in localStorage");
+          return;
+        }
+
+        console.log("Fetching applied jobs with token:", token);
+        console.log("API URL:", `${APPLICATION_API}/get`);
+
+        const res = await axios.get(`${APPLICATION_API}/get`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Attach token to request
+          },
+          withCredentials: true,
+        });
+
+        if (res.data.success) {
+          dispatch(setAllAppliedJobs(res.data.application));
+        } else {
+          console.error("Failed to fetch applied jobs: ", res.data.message);
+        }
       } catch (error) {
-        console.log(error);
+        console.error(
+          "Error fetching applied jobs:",
+          error.response?.data || error.message
+        );
       }
-      };
-      fetchAppliedJobs();
-  },[dispatch]);
-// useEffect(() => {
-//   const fetchAppliedJobs = async () => {
-//     try {
-//       const res = await axios.get(`${APPLICATION_API}/get`, {
-//         withCredentials: true,
-//       });
-//       console.log("API Response:", res.data); // Debugging
+    };
 
-//       if (res.data.success && res.data.applications) {
-//         dispatch(setAllAppliedJobs(res.data.applications));
-//       } else {
-//         dispatch(setAllAppliedJobs([])); // Set an empty array to prevent undefined issues
-//       }
-//     } catch (error) {
-//       console.error("Error fetching applied jobs:", error);
-//       dispatch(setAllAppliedJobs([])); // Prevent crashes by setting an empty array
-//     }
-//   };
-//   fetchAppliedJobs();
-// }, [dispatch]);
-
+    fetchAppliedJobs();
+  }, [dispatch]);
 };
 
 export default useGetAllAppliedJobs;
