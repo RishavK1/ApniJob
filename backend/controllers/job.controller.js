@@ -63,7 +63,6 @@ export const postJob = async (req, res) => {
 };
 
 // Fetch all jobs (for students or general users)
-
 export const getAllJobs = async (req, res) => {
   try {
     const keyword = req.query.keyword || ""; // Search keyword (if any)
@@ -106,8 +105,6 @@ export const getAllJobs = async (req, res) => {
   }
 };
 
-
-
 // Fetch jobs created by the logged-in admin
 export const getJobByid = async (req, res) => {
   try {
@@ -142,7 +139,6 @@ export const getJobByid = async (req, res) => {
     });
   }
 };
-
 
 export const getAdminJob = async (req, res) => {
   try {
