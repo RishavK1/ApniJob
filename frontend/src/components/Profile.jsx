@@ -120,13 +120,13 @@ const Profile = () => {
           <div className="flex items-center gap-4">
             <Avatar className="h-24 w-24 border border-gray-500">
               <AvatarImage
-                src={user?.profile?.profilephoto}
+                src={user?.profile?.profilephoto ?? ""}
                 alt="profile image"
               ></AvatarImage>
             </Avatar>
             <div>
-              <h1 className="font-bold text-xl">{user?.fullname}</h1>
-              <p>{user?.profile?.bio}</p>
+              <h1 className="font-bold text-xl">{user?.fullname ?? "N/A"}</h1>
+              <p>{user?.profile?.bio ?? "N/A"}</p>
             </div>
           </div>
           <Button
@@ -140,16 +140,16 @@ const Profile = () => {
         <div className="my-5">
           <div className="flex items-center gap-3 my-2">
             <Mail></Mail>
-            <span>{user?.email}</span>
+            <span>{user?.email ?? "N/A"}</span>
           </div>
           <div className="flex items-center gap-3 my-2">
             <Contact></Contact>
-            <span>{user?.phonenumber}</span>
+            <span>{user?.phonenumber ?? "N/A"}</span>
           </div>
           <div className="my-5">
-            <h1>{user?.skills}</h1>
+            <h1>{user?.skills ?? "N/A"}</h1>
             <div className="flex items-center gap-1 mt-2">
-              {user?.profile?.skills != 0 ? (
+              {user?.profile?.skills && user?.profile?.skills.length > 0 ? (
                 user?.profile?.skills.map((item, index) => (
                   <Badge key={index} className="bg-gray-300 hover:bg-gray-300">
                     {item}
