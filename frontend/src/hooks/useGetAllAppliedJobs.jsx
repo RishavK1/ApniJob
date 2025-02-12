@@ -21,7 +21,7 @@ const useGetAllAppliedJobs = () => {
       }
       };
       fetchAppliedJobs();
-  },[]);
+  },[dispatch]);
 // useEffect(() => {
 //   const fetchAppliedJobs = async () => {
 //     try {
