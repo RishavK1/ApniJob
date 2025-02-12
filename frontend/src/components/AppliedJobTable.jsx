@@ -17,7 +17,7 @@ const AppliedJobTable = () => {
   return (
     <div>
       <h1 className="font-bold text-lg my-5">
-        {/* Applied Jobs ({allAppliedJobs.length}) */}
+        Applied Jobs ({allAppliedJobs.length})
       </h1>
 
       <Table>
