@@ -14,10 +14,13 @@ import { useSelector } from "react-redux";
 const AppliedJobTable = () => {
   const { allAppliedJobs } = useSelector((store) => store.job);
 
+  // Ensure allAppliedJobs is an array before accessing its length
+  const appliedJobs = Array.isArray(allAppliedJobs) ? allAppliedJobs : [];
+
   return (
     <div>
       <h1 className="font-bold text-lg my-5">
-        Applied Jobs ({allAppliedJobs.length})
+        Applied Jobs ({appliedJobs.length})
       </h1>
 
       <Table>
@@ -31,14 +34,14 @@ const AppliedJobTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {allAppliedJobs.length === 0 ? (
+          {appliedJobs.length === 0 ? (
             <TableRow>
               <TableCell colSpan="4" className="text-center">
                 You have not applied to any jobs yet.
               </TableCell>
             </TableRow>
           ) : (
-            allAppliedJobs.map((appliedJob) => (
+            appliedJobs.map((appliedJob) => (
               <TableRow key={appliedJob._id}>
                 <TableCell>{appliedJob.createdAt.split("T")[0]}</TableCell>
                 <TableCell>{appliedJob?.job?.title}</TableCell>
