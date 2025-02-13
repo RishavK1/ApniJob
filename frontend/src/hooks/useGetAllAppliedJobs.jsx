@@ -23,11 +23,11 @@ const useGetAllAppliedJobs = () => {
           withCredentials: true,
         });
 
-        if (res.data.success && res.data.application) {
-          dispatch(setAllAppliedJobs(res.data.application));
+        if (res.data.success) {
+          dispatch(setAllAppliedJobs(res.data.application || [])); // Ensure it's an array
         } else {
           console.error("Failed to fetch applied jobs: ", res.data.message);
-          dispatch(setAllAppliedJobs([])); // Set an empty array if no data is returned
+          dispatch(setAllAppliedJobs([])); // Set an empty array on failure
         }
       } catch (error) {
         console.error(
