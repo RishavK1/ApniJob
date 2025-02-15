@@ -90,7 +90,7 @@ const Jobs = () => {
       <Navbar />
       <div className="max-w-7xl mx-auto mt-5">
         <div className="flex gap-5">
-          <div className="w-[20%]">
+          <div className="w-1/4">
             {isLoading ? <FilterCardSkeleton /> : <FilterCard />}
           </div>
           <div className="flex-1 h-[88vh] overflow-y-auto pb-5">
