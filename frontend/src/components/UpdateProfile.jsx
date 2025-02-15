@@ -101,18 +101,15 @@ const onSubmitHandler = async (e) => {
     }
 
     // Get token from localStorage
-    const token = localStorage.getItem("token");
-    if (!token) {
-      toast.error("Unauthorized: Token not provided");
-      setLoading(false);
-      return;
-    }
+    // const token = localStorage.getItem("token");
+    // if (!token) {
+    //   toast.error("Unauthorized: Token not provided");
+    //   setLoading(false);
+    //   return;
+    // }
 
     const res = await axios.post(`${USER_API}/profile/update`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`, // Add token here
-      },
+      
       withCredentials: true,
     });
 

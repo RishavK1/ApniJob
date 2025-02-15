@@ -147,7 +147,7 @@ const Profile = () => {
             <span>{user?.phonenumber ?? "N/A"}</span>
           </div>
           <div className="my-5">
-            <h1>{user?.skills ?? "N/A"}</h1>
+            <h1 className="font-bold">Skills</h1>
             <div className="flex items-center gap-1 mt-2">
               {user?.profile?.skills && user?.profile?.skills.length > 0 ? (
                 user?.profile?.skills.map((item, index) => (
