@@ -17,15 +17,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Updated CORS Configuration
-app.use(
-  cors({
-    origin: "https://apni-job.vercel.app", // Allow frontend on Vercel
-    credentials: true, // Allow cookies, authorization headers
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 
 // API Routes
 app.use("/api/v1/user/", userRoute);

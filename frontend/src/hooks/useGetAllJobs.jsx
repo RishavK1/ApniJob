@@ -11,24 +11,22 @@ const useGetAllJobs = () => {
   useEffect(() => {
     const fetchAllJobs = async () => {
       try {
-        const token = localStorage.getItem("token"); // Ensure token retrieval
-        if (!token) {
-          console.error("No token found in localStorage");
-          return;
-        }
+        // const token = localStorage.getItem("token"); // Ensure token retrieval
+        // if (!token) {
+        //   console.error("No token found in localStorage");
+        //   return;
+        // }
 
-        console.log("Fetching jobs with token:", token);
-        console.log("API URL:", `${JOB_API}/get?keyword=${searchedQuery}`);
 
-        const res = await axios.get(`${JOB_API}/get?keyword=${searchedQuery}`, {
-          headers: {
-            Authorization: `Bearer ${token}`, // Attach token to request
-          },
+        const res = await axios.get(`${JOB_API}get?keyword=${searchedQuery}`, {
+          // headers: {
+          //   Authorization: `Bearer ${token}`, // Attach token to request
+          // },
           withCredentials: true,
         });
 
         if (res.data.success) {
-          dispatch(setAllJobs(res.data.job));
+          dispatch(setAllJobs(res.data.jobs));
         } else {
           console.error("Failed to fetch jobs: ", res.data.message);
         }

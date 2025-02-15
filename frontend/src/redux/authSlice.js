@@ -4,18 +4,14 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     loading: false,
-    user: {
-      profile: {
-        skills: [], // ✅ Default empty array to prevent undefined errors
-      },
-    },
+    user: null,
   },
   reducers: {
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
     setUser: (state, action) => {
-      state.user = action.payload || { profile: { skills: [] } }; // ✅ Ensure profile & skills exist
+      state.user = action.payload 
     },
   },
 });
