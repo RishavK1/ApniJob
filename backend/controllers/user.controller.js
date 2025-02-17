@@ -154,11 +154,57 @@ export const login = async (req, res) => {
   }
 };
 
+// export const updateProfile = async (req, res) => {
+//   try {
+//     const { fullname, email, phonenumber, bio, skills } = req.body;
+//     const userId = req.id; // ✅ Ensure user ID is being passed correctly
+
+
+//     // Check if the user exists
+//     let user = await User.findById(userId);
+//     if (!user) {
+//       return res
+//         .status(404)
+//         .json({ message: "User not found", success: false });
+//     }
+
+//     // Update fields only if provided
+//     if (fullname) user.fullname = fullname;
+//     if (email) user.email = email;
+//     if (phonenumber) user.phonenumber = phonenumber;
+//     if (bio) user.profile.bio = bio;
+//     if (skills) {
+//       user.profile.skills = skills.split(",").map((skill) => skill.trim());
+//     }
+
+//     // Handle file upload
+//     if (req.file) {
+//       const fileUri = getDataUri(req.file);
+//       const cloudRes = await cloudinary.uploader.upload(fileUri.content);
+//       user.profile.profilephoto = cloudRes.secure_url;
+//     }
+
+//     await user.save();
+
+//     return res.status(200).json({
+//       message: "Profile updated successfully",
+//       user,
+//       success: true,
+//     });
+//   } catch (err) {
+//     console.error("Profile update error:", err); // ✅ Log full error
+
+//     return res.status(500).json({
+//       message: "Server error",
+//       error: err.message,
+//       success: false,
+//     });
+//   }
+// };
 export const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phonenumber, bio, skills } = req.body;
-    const userId = req.id; // ✅ Ensure user ID is being passed correctly
-
+    const userId = req.id; // Ensure user ID is being passed correctly
 
     // Check if the user exists
     let user = await User.findById(userId);
@@ -177,11 +223,12 @@ export const updateProfile = async (req, res) => {
       user.profile.skills = skills.split(",").map((skill) => skill.trim());
     }
 
-    // Handle file upload
-    if (req.file) {
+    // Handle resume upload
+    if (req.file && req.file.fieldname === "resume") {
       const fileUri = getDataUri(req.file);
       const cloudRes = await cloudinary.uploader.upload(fileUri.content);
-      user.profile.profilephoto = cloudRes.secure_url;
+      user.profile.resume = cloudRes.secure_url;
+      user.profile.resumeOriginalName = req.file.originalname;
     }
 
     await user.save();
@@ -192,7 +239,7 @@ export const updateProfile = async (req, res) => {
       success: true,
     });
   } catch (err) {
-    console.error("Profile update error:", err); // ✅ Log full error
+    console.error("Profile update error:", err); // Log full error
 
     return res.status(500).json({
       message: "Server error",
@@ -201,8 +248,6 @@ export const updateProfile = async (req, res) => {
     });
   }
 };
-
-
 
 export const logout = async (req, res) => {
   try {
