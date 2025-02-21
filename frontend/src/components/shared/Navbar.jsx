@@ -5,11 +5,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { Link, useNavigate, useLocation } from "react-router-dom"; 
-import { Avatar, AvatarImage } from "../ui/avatar";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 
-import { LogOut, User2 } from "lucide-react";
+import { LogOut, User2, User } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { USER_API } from "../utils/constant";
@@ -20,7 +20,7 @@ const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation(); 
+  const location = useLocation();
 
   const logouthandler = async () => {
     try {
@@ -34,7 +34,7 @@ const Navbar = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.messsage);
+      toast.error(error.response?.data?.messsage || "Logout failed");
     }
   };
 
@@ -84,9 +84,7 @@ const Navbar = () => {
                 </Button>
               </Link>
               <Link to="/signup">
-                <Button
-                  className="border bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded-2xl"
-                >
+                <Button className="border bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded-2xl">
                   Signup
                 </Button>
               </Link>
@@ -97,8 +95,11 @@ const Navbar = () => {
                 <Avatar className="cursor-pointer border border-blue-200">
                   <AvatarImage
                     src={user?.profile?.profilephoto}
-                    alt="@shadcn"
+                    alt={user?.fullname || "User"}
                   />
+                  <AvatarFallback>
+                    <User className="h-6 w-6 text-gray-400" />
+                  </AvatarFallback>
                 </Avatar>
               </PopoverTrigger>
               <PopoverContent className="w-72 bg-white rounded-2xl">
@@ -106,12 +107,17 @@ const Navbar = () => {
                   <Avatar className="cursor-pointer border border-blue-200">
                     <AvatarImage
                       src={user?.profile?.profilephoto}
-                      alt="@shadcn"
+                      alt={user?.fullname || "User"}
                     />
+                    <AvatarFallback>
+                      <User className="h-6 w-6 text-gray-400" />
+                    </AvatarFallback>
                   </Avatar>
                   <div>
                     <h4 className="font-bold">{user?.fullname}</h4>
-                    <p className="text-sm text-muted">{user?.profile?.bio}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {user?.profile?.bio || "No bio available"}
+                    </p>
                   </div>
                 </div>
                 <div className="flex flex-col my-2 text-gray-600">

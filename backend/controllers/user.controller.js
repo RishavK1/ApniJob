@@ -27,22 +27,23 @@ export const register = async (req, res) => {
       phonenumber,
       password: hashedPassword,
       role,
+      profile: {
+        profilephoto:
+          "https://res.cloudinary.com/demo/image/upload/v1/samples/default-avatar.png", // Add default avatar
+      },
     });
 
-    return res
-      .status(201)
-      .json({
-        message: "Account created successfully",
-        success: true,
-        user: newUser,
-      });
+    return res.status(201).json({
+      message: "Account created successfully",
+      success: true,
+      user: newUser,
+    });
   } catch (err) {
     return res
       .status(500)
       .json({ message: "Server error", error: err.message });
   }
 };
-
 
 export const login = async (req, res) => {
   try {
@@ -89,14 +90,14 @@ export const login = async (req, res) => {
       email: user.email,
       phonenumber: user.phonenumber,
       role: user.role,
-      profile: user.profile,
+      profile: user.profile || {}, // Ensure profile always exists
     };
 
     return res
       .status(200)
       .cookie("token", token, {
         maxAge: 1 * 24 * 60 * 60 * 1000,
-        httpsOnly: true,
+        httpOnly: true, // Fixed typo from httpsOnly to httpOnly
         sameSite: "strict",
       })
       .json({
@@ -106,6 +107,11 @@ export const login = async (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({
+      message: "Server error",
+      error: error.message,
+      success: false,
+    });
   }
 };
 
@@ -121,6 +127,11 @@ export const updateProfile = async (req, res) => {
         .json({ message: "User not found", success: false });
     }
 
+    // Initialize profile if it doesn't exist
+    if (!user.profile) {
+      user.profile = {};
+    }
+
     if (fullname) user.fullname = fullname;
     if (email) user.email = email;
     if (phonenumber) user.phonenumber = phonenumber;
@@ -130,17 +141,27 @@ export const updateProfile = async (req, res) => {
     }
 
     // Handle resume upload
-    if (req.files && req.files.resume) {
+    if (req.files && req.files.resume && req.files.resume[0]) {
       const fileUri = getDataUri(req.files.resume[0]);
-      const cloudRes = await cloudinary.uploader.upload(fileUri.content);
+      const cloudRes = await cloudinary.uploader.upload(fileUri.content, {
+        resource_type: "auto",
+        folder: "resumes",
+      });
       user.profile.resume = cloudRes.secure_url;
       user.profile.resumeOriginalName = req.files.resume[0].originalname;
     }
 
     // Handle profile photo upload
-    if (req.files && req.files.profilephoto) {
+    if (req.files && req.files.profilephoto && req.files.profilephoto[0]) {
       const fileUri = getDataUri(req.files.profilephoto[0]);
-      const cloudRes = await cloudinary.uploader.upload(fileUri.content);
+      const cloudRes = await cloudinary.uploader.upload(fileUri.content, {
+        resource_type: "image",
+        folder: "profiles",
+        transformation: [
+          { width: 250, height: 250, crop: "fill" },
+          { quality: "auto" },
+        ],
+      });
       user.profile.profilephoto = cloudRes.secure_url;
     }
 
@@ -160,6 +181,7 @@ export const updateProfile = async (req, res) => {
     });
   }
 };
+
 export const logout = async (req, res) => {
   try {
     return res

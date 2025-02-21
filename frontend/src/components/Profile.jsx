@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./shared/Navbar";
-import { Avatar, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import { Button } from "./ui/button";
-import { Contact, Mail, Pen } from "lucide-react";
+import { Contact, Mail, Pen, User } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { Label } from "./ui/label";
 import AppliedJobTable from "./AppliedJobTable";
@@ -28,7 +28,9 @@ const Profile = () => {
     return (
       <div>
         <Navbar />
-        
+        <div className="flex justify-center items-center h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
       </div>
     );
   }
@@ -41,13 +43,20 @@ const Profile = () => {
           <div className="flex items-center gap-4">
             <Avatar className="h-24 w-24 border border-gray-500">
               <AvatarImage
-                src={user?.profile?.profilephoto ?? ""}
-                alt="profile image"
+                src={
+                  user?.profile?.profilephoto
+                    ? `${user.profile.profilephoto}?${Date.now()}`
+                    : undefined
+                }
+                alt={user?.fullname || "Profile"}
               />
+              <AvatarFallback className="bg-gray-200">
+                <User className="h-12 w-12 text-gray-500" />
+              </AvatarFallback>
             </Avatar>
             <div>
               <h1 className="font-bold text-xl">{user?.fullname ?? "N/A"}</h1>
-              <p>{user?.profile?.bio ?? "N/A"}</p>
+              <p>{user?.profile?.bio ?? "No bio available"}</p>
             </div>
           </div>
           <Button
@@ -69,15 +78,18 @@ const Profile = () => {
           </div>
           <div className="my-5">
             <h1 className="font-bold">Skills</h1>
-            <div className="flex items-center gap-1 mt-2">
+            <div className="flex flex-wrap items-center gap-1 mt-2">
               {user?.profile?.skills && user?.profile?.skills.length > 0 ? (
-                user?.profile?.skills.map((item, index) => (
-                  <Badge key={index} className="bg-gray-300 hover:bg-gray-300">
+                user.profile.skills.map((item, index) => (
+                  <Badge
+                    key={index}
+                    className="bg-gray-300 hover:bg-gray-300 mb-1"
+                  >
                     {item}
                   </Badge>
                 ))
               ) : (
-                <span>NA</span>
+                <span>No skills listed</span>
               )}
             </div>
           </div>
@@ -85,14 +97,15 @@ const Profile = () => {
             <Label className="text-md font-bold">Resume</Label>
             {user?.profile?.resume ? (
               <a
-                target="blank"
-                href={user?.profile?.resume}
+                target="_blank"
+                rel="noopener noreferrer"
+                href={user.profile.resume}
                 className="text-blue-500 w-full hover:underline cursor-pointer"
               >
-                {user?.profile?.resumeOriginalName}
+                {user.profile.resumeOriginalName || "View Resume"}
               </a>
             ) : (
-              <span>NA</span>
+              <span>No resume uploaded</span>
             )}
           </div>
         </div>
