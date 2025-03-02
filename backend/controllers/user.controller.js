@@ -21,24 +21,37 @@ export const register = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({
+    let profilePhotoUrl;
+    if (req.file) {
+      const fileUri = getDataUri(req.file);
+      const cloudinaryResponse = await cloudinary.uploader.upload(
+        fileUri.content
+      );
+      console.log("Cloudinary response:", cloudinaryResponse); // Debug log
+      profilePhotoUrl = cloudinaryResponse.secure_url;
+    }
+
+    const user = await User.create({
       fullname,
       email,
       phonenumber,
       password: hashedPassword,
       role,
       profile: {
-        profilephoto:
-          "https://res.cloudinary.com/demo/image/upload/v1/samples/default-avatar.png", // Add default avatar
+        profilephoto: profilePhotoUrl || "",
       },
     });
+
+    // Log the created user for debugging
+    console.log("Created user:", user);
 
     return res.status(201).json({
       message: "Account created successfully",
       success: true,
-      user: newUser,
+      user: user,
     });
   } catch (err) {
+    console.error("Registration error:", err);
     return res
       .status(500)
       .json({ message: "Server error", error: err.message });
@@ -115,6 +128,23 @@ export const login = async (req, res) => {
   }
 };
 
+
+export const logout = async (req, res) => {
+  try {
+    return res
+      .status(200)
+      .cookie("token", "", { maxAge: 0, httpOnly: true })
+      .json({
+        message: "Logged out successfully",
+        success: true,
+      });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ message: "Server error", error: err.message });
+  }
+};
+
 export const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phonenumber, bio, skills } = req.body;
@@ -181,19 +211,69 @@ export const updateProfile = async (req, res) => {
     });
   }
 };
+// export const updateProfile = async (req, res) => {
+//   try {
+//     const { fullname, email, phonenumber, bio, skills } = req.body;
+//     const userId = req.id;
 
-export const logout = async (req, res) => {
-  try {
-    return res
-      .status(200)
-      .cookie("token", "", { maxAge: 0, httpOnly: true })
-      .json({
-        message: "Logged out successfully",
-        success: true,
-      });
-  } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Server error", error: err.message });
-  }
-};
+//     let user = await User.findById(userId);
+//     if (!user) {
+//       return res
+//         .status(404)
+//         .json({ message: "User not found", success: false });
+//     }
+
+//     // Initialize profile if it doesn't exist
+//     if (!user.profile) {
+//       user.profile = {};
+//     }
+
+//     if (fullname) user.fullname = fullname;
+//     if (email) user.email = email;
+//     if (phonenumber) user.phonenumber = phonenumber;
+//     if (bio) user.profile.bio = bio;
+//     if (skills) {
+//       user.profile.skills = skills.split(",").map((skill) => skill.trim());
+//     }
+
+//     // Handle resume upload
+//     if (req.files && req.files.resume && req.files.resume[0]) {
+//       const fileUri = getDataUri(req.files.resume[0]);
+//       const cloudRes = await cloudinary.uploader.upload(fileUri.content, {
+//         resource_type: "auto",
+//         folder: "resumes",
+//       });
+//       user.profile.resume = cloudRes.secure_url;
+//       user.profile.resumeOriginalName = req.files.resume[0].originalname;
+//     }
+
+//     // Handle profile photo upload
+//     if (req.files && req.files.profilephoto && req.files.profilephoto[0]) {
+//       const fileUri = getDataUri(req.files.profilephoto[0]);
+//       const cloudRes = await cloudinary.uploader.upload(fileUri.content, {
+//         resource_type: "image",
+//         folder: "profiles",
+//         transformation: [
+//           { width: 250, height: 250, crop: "fill" },
+//           { quality: "auto" },
+//         ],
+//       });
+//       user.profile.profilephoto = cloudRes.secure_url;
+//     }
+
+//     await user.save();
+
+//     return res.status(200).json({
+//       message: "Profile updated successfully",
+//       user,
+//       success: true,
+//     });
+//   } catch (err) {
+//     console.error("Profile update error:", err);
+//     return res.status(500).json({
+//       message: "Server error",
+//       error: err.message,
+//       success: false,
+//     });
+//   }
+// };

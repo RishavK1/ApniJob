@@ -38,42 +38,80 @@ const UpdateProfile = ({ open, setOpen }) => {
     setInput({ ...input, file });
   };
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("fullname", input.fullname || "");
-      formData.append("email", input.email || "");
-      formData.append("phonenumber", input.phonenumber || "");
-      formData.append("bio", input.bio || "");
+  // const onSubmitHandler = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("fullname", input.fullname || "");
+  //     formData.append("email", input.email || "");
+  //     formData.append("phonenumber", input.phonenumber || "");
+  //     formData.append("bio", input.bio || "");
 
-      if (Array.isArray(input.skills)) {
-        formData.append("skills", input.skills.join(","));
-      } else if (typeof input.skills === "string") {
-        formData.append("skills", input.skills);
-      }
+  //     if (Array.isArray(input.skills)) {
+  //       formData.append("skills", input.skills.join(","));
+  //     } else if (typeof input.skills === "string") {
+  //       formData.append("skills", input.skills);
+  //     }
 
-      if (input.file) {
-        formData.append("resume", input.file);
-      }
+  //     if (input.file) {
+  //       formData.append("resume", input.file);
+  //     }
 
-      const res = await axios.post(`${USER_API}/profile/update`, formData, {
-        withCredentials: true,
-      });
+  //     const res = await axios.post(`${USER_API}/profile/update`, formData, {
+  //       withCredentials: true,
+  //     });
 
-      if (res.data.success) {
-        dispatch(setUser(res.data.user));
-        toast.success(res.data.message);
-        setOpen(false);
-      }
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Update failed");
-    } finally {
-      setLoading(false);
+  //     if (res.data.success) {
+  //       dispatch(setUser(res.data.user));
+  //       toast.success(res.data.message);
+  //       setOpen(false);
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.response?.data?.message || "Update failed");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+const onSubmitHandler = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  try {
+    const formData = new FormData();
+    formData.append("fullname", input.fullname || "");
+    formData.append("email", input.email || "");
+    formData.append("phonenumber", input.phonenumber || "");
+    formData.append("bio", input.bio || "");
+
+    if (Array.isArray(input.skills)) {
+      formData.append("skills", input.skills.join(","));
+    } else if (typeof input.skills === "string") {
+      formData.append("skills", input.skills);
     }
-  };
 
+    if (input.file) {
+      formData.append("resume", input.file);
+    }
+
+    const res = await axios.post(`${USER_API}/profile/update`, formData, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    if (res.data.success) {
+      dispatch(setUser(res.data.user));
+      toast.success(res.data.message);
+      setOpen(false);
+    }
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Update failed");
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div>
       <Dialog open={open} onOpenChange={setOpen}>

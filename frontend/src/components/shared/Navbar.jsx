@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Popover,
   PopoverContent,
@@ -94,8 +93,12 @@ const Navbar = () => {
               <PopoverTrigger asChild>
                 <Avatar className="cursor-pointer border border-blue-200">
                   <AvatarImage
-                    src={user?.profile?.profilephoto}
+                    src={user?.profile?.profilephoto || "/default-avatar.png"}
                     alt={user?.fullname || "User"}
+                    onError={(e) => {
+                      e.target.src = "/default-avatar.png";
+                      console.log("Image load error:", e);
+                    }}
                   />
                   <AvatarFallback>
                     <User className="h-6 w-6 text-gray-400" />
@@ -106,8 +109,12 @@ const Navbar = () => {
                 <div className="flex gap-4 space-y-2">
                   <Avatar className="cursor-pointer border border-blue-200">
                     <AvatarImage
-                      src={user?.profile?.profilephoto}
+                      src={user?.profile?.profilephoto || "/default-avatar.png"}
                       alt={user?.fullname || "User"}
+                      onError={(e) => {
+                        e.target.src = "/default-avatar.png";
+                        console.log("Image load error:", e);
+                      }}
                     />
                     <AvatarFallback>
                       <User className="h-6 w-6 text-gray-400" />
